@@ -2,9 +2,10 @@
   "name": "scifidb",
   "version": "0.0.1",
   "description": "A Science Fiction database with Movie-OS looks built with JSONTag and Simplyview and SimplyStore",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.mjs",
+    "test": "echo \"Error: no test specified yet\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/Hoxolotl/SciFiDB/issues"
   },
-  "homepage": "https://github.com/Hoxolotl/SciFiDB#readme"
+  "homepage": "https://github.com/Hoxolotl/SciFiDB#readme",
+  "dependencies": {
+    "@muze-nl/jsontag": "^0.8.6",
+    "@muze-nl/simplystore": "^0.4.7",
+    "cors": "^2.8.5",
+    "simplyview": "^2.0.3"
+  }
 }
