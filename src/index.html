@@ -1,0 +1,99 @@
+<!doctype html>
+<body>
+
+    <h2>Star Wars DB lookup:</h2>
+   
+    <form>
+        
+        <div data-simply-collection="mainSearch">
+            <label>
+               Possible requests
+            </label>
+            <select data-simply-element = "requestData">
+                 <option>people</option>
+                 <option>films</option>
+                 <option>starships</option>
+            </select>
+        </div>
+
+
+        <div data-simply-collection="arraySearch">
+            <label>
+               Which one out of the many?
+            </label>
+            <input type="number" min="0" max="100" data-simply-element = "requestIndex" />
+        </div>
+    
+    </form>
+
+    <div>
+        <button data-simply-command="engage">Get some data</button>
+    </div>
+
+
+    <div id="display">
+        <h3 data-simply-field="display">Let me see!</h3>
+    </div>
+
+    <script src="https://cdn.simplyedit.io/1/simply-edit.js" type="text/javascript"></script>
+    <script src="/resources/simplyview/simply.everything.js"type="text/javascript"></script>
+    <script src="/resources/jsontag/browser.js" type="text/javascript"></script>
+
+    <script>
+
+        var test = simply.app({
+            view: {
+                out: 'start',
+                display : 'display'
+            }
+
+        });
+
+        let query = 'from(data.people[1]).select({name: _})';
+
+        function getRootData(elements) {
+            console.log(elements.requestData.value);
+
+            query = 'from(data.' + elements.requestData.value + ')';
+        }
+
+        simply.collect.addListener('mainSearch', getRootData);
+
+        simply.collect.addListener('arraySearch', fooyay);
+        
+        function fooyay(elements){
+            console.log(elements.requestIndex.value);
+        }
+        
+
+        test.commands.engage = function(el, value) {
+            test.view.out = "diplay this";
+            //test.view.out = ;
+            console.log("boooyaa");
+            console.log(test.value);
+            test.view.display = "OHAY!";
+
+        let url = "http://localhost:3000/query/";
+        
+        fetch(url, {
+            method : "POST",
+            body : query,
+            headers: {
+                "Accept":"application/jsontag"
+            }
+        }).then(response => {
+        if (response.ok) {
+            return response.text()
+        }
+        throw new Error(response, response.status)
+        }).then(json => {
+            let p = JSONTag.parse(json);
+            let s = JSONTag.stringify(p);
+            let type = JSONTag.getType(p);
+            console.log(s)
+            test.view.display = s;
+        })
+    }
+    
+    </script>
+</body>
