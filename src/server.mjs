@@ -31,7 +31,7 @@ var corsOptions = {
 SimplyStore.use(cors(corsOptions))
 
 SimplyStore.run({
-  datafile: process.cwd()+'/Databases/SWAPI.jsontag',
+  datafile: process.cwd()+'/../Data/SWAPI.jsontag',
   port : 3000,
   //wwwroot : "."
 })

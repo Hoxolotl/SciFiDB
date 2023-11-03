@@ -1,99 +1,113 @@
 <!doctype html>
+<meta charset="utf-8">
 <body>
 
-    <h2>Star Wars DB lookup:</h2>
-   
-    <form>
-        
-        <div data-simply-collection="mainSearch">
-            <label>
-               Possible requests
-            </label>
-            <select data-simply-element = "requestData">
-                 <option>people</option>
-                 <option>films</option>
-                 <option>starships</option>
-            </select>
-        </div>
+    <title>Star Wars DB lookup:</title>
+    <h2>People</h2>
+    <ul data-simply-list="people">
+    <template>
+        <li>
+            <span data-simply-field="name">person</span>
+            ,
+            <span data-simply-field="height">height</span>
+            tall
+        </li>
+    </template>
+    </ul>
 
+    <script src="https://cdn.simplyedit.io/1/simply-edit.js" data-simply-storage="none"></script>
+    <script src="https://unpkg.com/simplyview/dist/simply.everything.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.1.0/dist/browser.js"></script>
+     <script src="/assets/js/jsontag/dist/browser.js" type="text/javascript"></script>
 
-        <div data-simply-collection="arraySearch">
-            <label>
-               Which one out of the many?
-            </label>
-            <input type="number" min="0" max="100" data-simply-element = "requestIndex" />
-        </div>
-    
-    </form>
-
-    <div>
-        <button data-simply-command="engage">Get some data</button>
-    </div>
-
-
-    <div id="display">
-        <h3 data-simply-field="display">Let me see!</h3>
-    </div>
-
-    <script src="https://cdn.simplyedit.io/1/simply-edit.js" type="text/javascript"></script>
-    <script src="/resources/simplyview/simply.everything.js"type="text/javascript"></script>
-    <script src="/resources/jsontag/browser.js" type="text/javascript"></script>
 
     <script>
+    let url = "http://localhost:3000/query/";
+    let queryPeople = 'from(data.people).select({ name : _, height: _})';
+    //let queryPlanets = 'from(data.planets)';
 
-        var test = simply.app({
+   //let url2 = "https://api.hackerwebapp.com/"
+    //const client = metro.client(url);
+    //const result = await client.get(query);
+
+    var hnpwa = simply.app({
             view: {
-                out: 'start',
-                display : 'display'
+                people: [],
+                planets: [] 
             }
-
         });
 
-        let query = 'from(data.people[1]).select({name: _})';
-
-        function getRootData(elements) {
-            console.log(elements.requestData.value);
-
-            query = 'from(data.' + elements.requestData.value + ')';
-        }
-
-        simply.collect.addListener('mainSearch', getRootData);
-
-        simply.collect.addListener('arraySearch', fooyay);
-        
-        function fooyay(elements){
-            console.log(elements.requestIndex.value);
-        }
-        
-
-        test.commands.engage = function(el, value) {
-            test.view.out = "diplay this";
-            //test.view.out = ;
-            console.log("boooyaa");
-            console.log(test.value);
-            test.view.display = "OHAY!";
-
-        let url = "http://localhost:3000/query/";
-        
-        fetch(url, {
+    fetch(url, {
             method : "POST",
-            body : query,
+            body : queryPeople,
             headers: {
                 "Accept":"application/jsontag"
             }
-        }).then(response => {
+    })
+    .then(response => {
         if (response.ok) {
             return response.text()
         }
         throw new Error(response, response.status)
-        }).then(json => {
-            let p = JSONTag.parse(json);
-            let s = JSONTag.stringify(p);
-            let type = JSONTag.getType(p);
-            console.log(s)
-            test.view.display = s;
-        })
-    }
-    
+    })
+    .then(json => {
+        let p = JSONTag.parse(json);
+        let s = JSON.stringify(p);
+        let u = JSON.parse(s);
+        let type = JSONTag.getType(p);
+        
+        let testArray = [   
+            {
+                "name": "Luke Skywalker"
+            },
+            {
+                "name": "C-3PO"
+            }
+        ];
+       
+        let displayArray = u;
+
+        console.log(displayArray);
+
+        hnpwa.view.people = displayArray;
+    })
+
+/*
+    var hnpwa = simply.app({
+        routes: {
+            '/:*': function(params) {
+                client.get('from(data.people).select({"name": _})')
+                .then(response => response.text())
+                .then(text => {
+                    console.log(text);
+                    let people = JSONTag.parse(text);
+                    let peopleString = JSON.stringify(people);
+                    let displayPeople = JSON.parse(peopleString);
+                    //console.log(displayPeople);
+                    //hnpwa.view.people = people;
+                });
+
+                client.get('from(data.planets).select({"name": _})')
+                .then(response => response.text())
+                .then(text => {
+                    console.log(text);
+                    let planets = JSONTag.parse(text);
+                    console.log(p);
+                    //hnpwa.view.planets = planets;
+                });
+
+            }
+
+        },
+        view: {
+            people: [],
+            planets: []
+        }
+    });
+*/
+
+
     </script>
+
+
 </body>
