@@ -17,19 +17,21 @@
 
     <script src="https://cdn.simplyedit.io/1/simply-edit.js" data-simply-storage="none"></script>
     <script src="https://unpkg.com/simplyview/dist/simply.everything.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.1.0/dist/browser.js"></script>
-     <script src="/assets/js/jsontag/dist/browser.js" type="text/javascript"></script>
+    <script src="/assets/js/jsontag/dist/browser.js" type="text/javascript"></script>
 
+    <script type="module" >
 
-    <script>
+    import * as metro from "https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.2.1/src/metro.mjs"
+
     let url = "http://localhost:3000/query/";
     let queryPeople = 'from(data.people).select({ name : _, height: _})';
     //let queryPlanets = 'from(data.planets)';
 
-   //let url2 = "https://api.hackerwebapp.com/"
-    //const client = metro.client(url);
-    //const result = await client.get(query);
 
+   //let url2 = "https://api.hackerwebapp.com/"
+    const client = metro.client(url);
+    //const result = await client.get(query);
+/*
     var hnpwa = simply.app({
             view: {
                 people: [],
@@ -72,11 +74,11 @@
         hnpwa.view.people = displayArray;
     })
 
-/*
+*/
     var hnpwa = simply.app({
         routes: {
             '/:*': function(params) {
-                client.get('from(data.people).select({"name": _})')
+                client.post({body: queryPeople })
                 .then(response => response.text())
                 .then(text => {
                     console.log(text);
@@ -84,16 +86,7 @@
                     let peopleString = JSON.stringify(people);
                     let displayPeople = JSON.parse(peopleString);
                     //console.log(displayPeople);
-                    //hnpwa.view.people = people;
-                });
-
-                client.get('from(data.planets).select({"name": _})')
-                .then(response => response.text())
-                .then(text => {
-                    console.log(text);
-                    let planets = JSONTag.parse(text);
-                    console.log(p);
-                    //hnpwa.view.planets = planets;
+                    hnpwa.view.people = people;
                 });
 
             }
@@ -101,11 +94,8 @@
         },
         view: {
             people: [],
-            planets: []
         }
     });
-*/
-
 
     </script>
 
