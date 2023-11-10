@@ -1,0 +1,46 @@
+{
+  "name": "@muze-nl/jsontag",
+  "version": "0.8.6",
+  "description": "tagged json library",
+  "type": "module",
+  "main": "src/JSONTag.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tap test/*.mjs",
+    "build": "parcel build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poef/jsontag.git"
+  },
+  "author": "auke@muze.nl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/poef/jsontag/issues"
+  },
+  "homepage": "https://github.com/poef/jsontag#readme",
+  "targets": {
+    "regular": {
+      "source": "src/browser.mjs",
+      "context": "browser",
+      "includeNodeModules": true
+    }
+  },
+  "devDependencies": {
+    "ohm-js": "^16.3.2",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "eslint": "^8.13.0",
+    "events": "^3.3.0",
+    "parcel": "^2.9.3",
+    "parcel-resolver-ignore": "^2.1.5",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "tap": "^16.0.1"
+  },
+  "parcelIgnore": [
+    "node:crypto"
+  ]
+}

@@ -6,21 +6,6 @@ import JSONTag from '@muze-nl/jsontag'
 import cors from 'cors'
 import express from 'express'
 
-/*
-//configure and start webserver
-const app = express();
-const portapp = process.env.PORT || 8000;
-
-app.use('/node_modules', express.static('/node_modules', { root: "." }));
-
-app.get('/', function(req, res) {
-  res.sendFile('index.html', { root: "." });
-});
-
-app.listen(portapp);
-console.log('Server started at http://localhost:' + portapp);
-*/
-
 //configure cors for the database(s) server
 var corsOptions = {
     origin: '*',
@@ -31,7 +16,7 @@ var corsOptions = {
 SimplyStore.use(cors(corsOptions))
 
 SimplyStore.run({
-  datafile: process.cwd()+'/../Data/SWAPI.jsontag',
+  datafile: process.cwd()+'/../data/SWAPI.jsontag',
   port : 3000,
   //wwwroot : "."
 })

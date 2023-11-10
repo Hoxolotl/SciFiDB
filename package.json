@@ -4,8 +4,8 @@
   "description": "A Science Fiction database with Movie-OS looks built with JSONTag and Simplyview and SimplyStore",
   "main": "index.mjs",
   "scripts": {
-    "start": "node server.mjs",
-    "test": "echo \"Error: no test specified yet\" && exit 1"
+    "start": "node src/server.mjs ; cd www php -S localhost:4500",
+    "test": "echo 'Error: no test specified yet' && exit 1"
   },
   "repository": {
     "type": "git",

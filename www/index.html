@@ -21,7 +21,7 @@
 
     <script type="module" >
 
-    import * as metro from "https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.2.1/src/metro.mjs"
+    import * as metro from "https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.2.2/src/metro.mjs"
 
     let url = "http://localhost:3000/query/";
     let queryPeople = 'from(data.people).select({ name : _, height: _})';
@@ -81,12 +81,13 @@
                 client.post({body: queryPeople })
                 .then(response => response.text())
                 .then(text => {
-                    console.log(text);
-                    let people = JSONTag.parse(text);
-                    let peopleString = JSON.stringify(people);
+                    //console.log(text);
+                    let peopleX = JSONTag.parse(text);
+                    let peopleString = JSON.stringify(peopleX);
                     let displayPeople = JSON.parse(peopleString);
-                    //console.log(displayPeople);
-                    hnpwa.view.people = people;
+                    console.log(displayPeople);
+                    console.log(peopleX);
+                    hnpwa.view.peopleX = peopleX; //displayPeople;
                 });
 
             }
