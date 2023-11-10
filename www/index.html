@@ -1,19 +1,46 @@
 <!doctype html>
 <meta charset="utf-8">
+<style>
+    body {
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 5px;
+    }
+    .listgrid {
+    }
+    .formgrid {
+    }
+    
+</style>
+
 <body>
 
     <title>Star Wars DB lookup:</title>
-    <h2>People</h2>
-    <ul data-simply-list="people">
-    <template>
-        <li>
-            <span data-simply-field="name">person</span>
-            ,
-            <span data-simply-field="height">height</span>
-            tall
-        </li>
-    </template>
-    </ul>
+    <section class="listgrid">
+        <h2>People</h2>
+        <div>
+            <ul data-simply-list="people">
+            <template>
+                <li>
+                    <span data-simply-field="name">person</span>
+                </li>
+            </template>
+            </ul>
+        </div>
+    </section>
+    <section class="formgrid">
+        <h2>Data</h2>
+        <div>
+            <form data-simply-list="people">
+                <template>
+                    <h3 data-simply-field="name">person</h3>
+                    <p data-simply-field="height">height tall</p>
+                    <p data-simply-field="desc">description</p>
+                </template>
+            </form>
+        </div>
+    </section>
 
     <script src="https://cdn.simplyedit.io/1/simply-edit.js" data-simply-storage="none"></script>
     <script src="https://cdn.jsdelivr.net/gh/SimplyEdit/simplyview@2.0.2/dist/simply.everything.js"></script>
@@ -24,7 +51,7 @@
     import * as metro from "https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.2.2/src/metro.mjs"
 
     let url = "http://localhost:3000/query/";
-    let queryPeople = 'from(data.people).select({ name : _, height: _})';
+    let queryPeople = 'from(data.people).select({ name : _, height: _, desc: _})';
 
     const client = metro.client(url);
 
