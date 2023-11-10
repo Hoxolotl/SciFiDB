@@ -19,9 +19,8 @@ Built using simplystore
 # Running
 After installing the node_modules using "npm install":
 
-* start the database and front end server from two command line interfaces:
-  * one with "npm run startDB" to start the database
-  * one with "npm run startFE" to start the front end php server 
+* start the database and front end server from the command line interfaces:
+  * in the SciFiDB folder open a terminal and type "npm start" 
 
 # Explanation
 
