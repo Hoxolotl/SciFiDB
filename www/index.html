@@ -16,8 +16,8 @@
     </ul>
 
     <script src="https://cdn.simplyedit.io/1/simply-edit.js" data-simply-storage="none"></script>
-    <script src="https://unpkg.com/simplyview/dist/simply.everything.js"></script>
-    <script src="/assets/js/jsontag/dist/browser.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/SimplyEdit/simplyview@2.0.2/dist/simply.everything.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@muze-nl/jsontag@0.9.0/dist/browser.js" type="text/javascript"></script>
 
     <script type="module" >
 
@@ -25,73 +25,22 @@
 
     let url = "http://localhost:3000/query/";
     let queryPeople = 'from(data.people).select({ name : _, height: _})';
-    //let queryPlanets = 'from(data.planets)';
 
-
-   //let url2 = "https://api.hackerwebapp.com/"
     const client = metro.client(url);
-    //const result = await client.get(query);
-/*
-    var hnpwa = simply.app({
-            view: {
-                people: [],
-                planets: [] 
-            }
-        });
 
-    fetch(url, {
-            method : "POST",
-            body : queryPeople,
-            headers: {
-                "Accept":"application/jsontag"
-            }
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.text()
-        }
-        throw new Error(response, response.status)
-    })
-    .then(json => {
-        let p = JSONTag.parse(json);
-        let s = JSON.stringify(p);
-        let u = JSON.parse(s);
-        let type = JSONTag.getType(p);
-        
-        let testArray = [   
-            {
-                "name": "Luke Skywalker"
-            },
-            {
-                "name": "C-3PO"
-            }
-        ];
-       
-        let displayArray = u;
-
-        console.log(displayArray);
-
-        hnpwa.view.people = displayArray;
-    })
-
-*/
     var hnpwa = simply.app({
         routes: {
             '/:*': function(params) {
                 client.post({body: queryPeople })
                 .then(response => response.text())
                 .then(text => {
-                    //console.log(text);
                     let peopleX = JSONTag.parse(text);
-                    let peopleString = JSON.stringify(peopleX);
+                    let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
                     let displayPeople = JSON.parse(peopleString);
-                    console.log(displayPeople);
-                    console.log(peopleX);
-                    hnpwa.view.peopleX = peopleX; //displayPeople;
+                    hnpwa.view.people = displayPeople;
                 });
 
             }
-
         },
         view: {
             people: [],

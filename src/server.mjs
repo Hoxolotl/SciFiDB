@@ -5,6 +5,7 @@ import fs from 'fs'
 import JSONTag from '@muze-nl/jsontag'
 import cors from 'cors'
 import express from 'express'
+import path from 'path'
 
 //configure cors for the database(s) server
 var corsOptions = {
@@ -16,7 +17,7 @@ var corsOptions = {
 SimplyStore.use(cors(corsOptions))
 
 SimplyStore.run({
-  datafile: process.cwd()+'/../data/SWAPI.jsontag',
+  datafile: path.join(process.cwd(), "data", "SWAPI.jsontag"),
   port : 3000,
   //wwwroot : "."
 })
