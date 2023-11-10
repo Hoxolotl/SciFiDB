@@ -14,12 +14,14 @@ Built using simplystore
 
 # Dependencies
 * Nodejs
-* PHP to run the front end, might get replaced by node and an express server.
+* PHP to run the front end
 
 # Running
 After installing the node_modules using "npm install":
 
-* start the database and front end server with "npm start" in the root folder. 
+* start the database and front end server from two command line interfaces:
+* * one with "npm run startDB" to start the database
+* * one with "npm rund startFE" to start the front end php server 
 
 # Explanation
 
