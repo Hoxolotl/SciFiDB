@@ -20,8 +20,8 @@ Built using simplystore
 After installing the node_modules using "npm install":
 
 * start the database and front end server from two command line interfaces:
-* * one with "npm run startDB" to start the database
-* * one with "npm rund startFE" to start the front end php server 
+ * one with "npm run startDB" to start the database
+ * one with "npm run startFE" to start the front end php server 
 
 # Explanation
 
