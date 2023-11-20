@@ -23,10 +23,7 @@
             <ul data-simply-list="people">
             <template>
                 <li>
-                    <a  data-simply-field="name"
-                        data-simply-transformer="people-link"
-                        data-simply-content="fixed" 
-                    >
+                <a data-simply-command="run-query" data-simply-field="name" >
                     <span data-simply-field="name">person</span>
                 </a>
                 </li>
@@ -100,10 +97,24 @@
 
     var hnpwa = simply.app({
         routes: {
-             '/:name' : function(params) {
-                console.log(params.name);
+            '/:*': function(params) {
+                client.post({body: queryPeople })
+                .then(response => response.text())
+                .then(text => {
+                    console.log("Root data requested")
+                    let peopleX = JSONTag.parse(text);
+                    let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
+                    let displayPeople = JSON.parse(peopleString);
+                    hnpwa.view.people = displayPeople;
+                });
+
+            }
+        },
+        commands: {
+            'run-query' : function(params) {
+                console.log(params);
                 let peopleNameQuery = '';
-                let namePerson = params.name;
+                let namePerson = params.href;
                 peopleNameQuery = 'from(data.people).select({ name : _, height: _, desc: _}).where({ name : "' + namePerson + '" })'; 
                 
                 client.post({body: peopleNameQuery })
@@ -117,18 +128,6 @@
                     let displayPeople = JSON.parse(peopleString);
                     hnpwa.view.person = displayPeople;
                 });
-          },
-            '/:*': function(params) {
-                client.post({body: queryPeople })
-                .then(response => response.text())
-                .then(text => {
-                    console.log("Root data requested")
-                    let peopleX = JSONTag.parse(text);
-                    let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
-                    let displayPeople = JSON.parse(peopleString);
-                    hnpwa.view.people = displayPeople;
-                });
-
             }
         },
         view: {
