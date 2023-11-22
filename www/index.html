@@ -23,9 +23,7 @@
             <ul data-simply-list="people">
             <template>
                 <li>
-                <a data-simply-command="run-query" data-simply-field="name" >
-                    <span data-simply-field="name">person</span>
-                </a>
+                    <a data-simply-command="run-query" data-simply-value="name"> <span data-simply-field="name" > person </span> </a>
                 </li>
             </template>
             </ul>
@@ -112,7 +110,7 @@
         },
         commands: {
             'run-query' : function(params) {
-                console.log(params);
+                console.log(params)
                 let peopleNameQuery = '';
                 let namePerson = params.href;
                 peopleNameQuery = 'from(data.people).select({ name : _, height: _, desc: _}).where({ name : "' + namePerson + '" })'; 
@@ -121,9 +119,9 @@
                 .then(response => response.text())
                 .then(text => {
                     console.log("Side panel data requested")
-                    console.log(text);
+                    //console.log(text);
                     let peopleX = JSONTag.parse(text);
-                    console.log(peopleX);
+                    //console.log(peopleX);
                     let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
                     let displayPeople = JSON.parse(peopleString);
                     hnpwa.view.person = displayPeople;
