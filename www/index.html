@@ -15,85 +15,42 @@
 </style>
 
 <body>
-
     <title>Star Wars DB lookup:</title>
     <section class="listgrid">
         <h2>People</h2>
         <div>
-            <ul data-simply-list="people">
+            <ul data-simply-list="people" data-simply-entry="person">
             <template>
                 <li>
-                    <a data-simply-command="run-query" data-simply-value="name"> <span data-simply-field="name" > person </span> </a>
+                    <a data-simply-command="run-query" data-simply-field="person"> person </a>
                 </li>
             </template>
-            </ul>
+        </ul>
         </div>
     </section>
     <section class="formgrid">
         <h2>Data</h2>
         <div>
-            <form data-simply-list="person">
-                <template>
-
-                    <h3 data-simply-field="name">person</h3>
-                    <span data-simply-field="height">height tall</span> Tall
-                    <p data-simply-field="desc">description</p>
-                </template>
-            </form>
+                    <h3 data-simply-field="person.name">person</h3>
+                    <span data-simply-field="person.height">height tall</span> Tall
+                    <p data-simply-field="person.desc">description</p>
         </div>
     </section>
 
     <script src="https://cdn.simplyedit.io/1/simply-edit.js" data-simply-storage="none"></script>
     <script src="https://cdn.jsdelivr.net/gh/SimplyEdit/simplyview@2.0.2/dist/simply.everything.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@muze-nl/jsontag@0.9.0/dist/browser.js" type="text/javascript"></script>
-
-    <script>
-        <!-- http://localhost:3000/query/people/1/name/ gives C-3PO -->
-/*
-        let peopleNameQuery = '';
-        let namePerson = '';
-
-        peopleNameQuery = 'from(data.people).select({ name : _, height: _, desc: _}).where({name :' + namePerson + '})';
-
-        editor.transformers.people_link = {
-            render: function(data) {
-                
-                var href = '/people/'+(data.href ? data.href : data);
-                if (href.indexOf('#people')==-1) {
-                     console.log(href);
-                     href = '/#people/'+href;
-                };
-                
-                /*
-                client.post({body: peopleNameQuery })
-                  .then(result => {
-                        let peopleX = JSONTag.parse(text);
-                        let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
-                        let displayPeople = JSON.parse(peopleString);
-                        hnpwa.view.person = displayPeople;
-                });
-                
-                return href;
-            }
-        };
-*/
-    </script>
-
+       
     <script type="module" >
 
     import * as metro from "https://cdn.jsdelivr.net/npm/@muze-nl/metro@0.2.2/src/metro.mjs"
 
     let url = "http://localhost:3000/query/";
-    let queryPeople = 'from(data.people).select({ name : _, height: _, desc: _})';
-
-    //let peopleNameQuery = '';
-    //let namePerson = '';
-
-    //peopleNameQuery = 'from(data.people).select({ name : _, height: _, desc: _})'; //.where({name :' + namePerson + '})';
+    let queryPeople = 'from(data.people)';
 
     const client = metro.client(url);
 
-    var hnpwa = simply.app({
+    window.hnpwa = simply.app({
         routes: {
             '/:*': function(params) {
                 client.post({body: queryPeople })
@@ -101,37 +58,58 @@
                 .then(text => {
                     console.log("Root data requested")
                     let peopleX = JSONTag.parse(text);
-                    let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
-                    let displayPeople = JSON.parse(peopleString);
-                    hnpwa.view.people = displayPeople;
+                    let newPeoples = peopleX.map((person) => (    
+                        {
+                            href : JSONTag.getAttribute(person, 'id').replace("swapi.co/api", "localhost:4500"),
+                            innerHTML : person.name
+                        }
+                    ))
+                    hnpwa.view.people = newPeoples;
                 });
 
-            }
-        },
-        commands: {
-            'run-query' : function(params) {
-                console.log(params)
-                let peopleNameQuery = '';
-                let namePerson = params.href;
-                peopleNameQuery = 'from(data.people).select({ name : _, height: _, desc: _}).where({ name : "' + namePerson + '" })'; 
-                
-                client.post({body: peopleNameQuery })
+            },
+            '/people/:*': function(params) {
+                client.post({body: queryPeople })
                 .then(response => response.text())
                 .then(text => {
-                    console.log("Side panel data requested")
-                    //console.log(text);
+                    console.log("People data requested")
                     let peopleX = JSONTag.parse(text);
-                    //console.log(peopleX);
-                    let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
-                    let displayPeople = JSON.parse(peopleString);
-                    hnpwa.view.person = displayPeople;
+                    let newPeoples = peopleX.map((person) => (    
+                        {   href : JSONTag.getAttribute(person, 'id'),
+                            innerHTML : person.name
+                        })
+                    )
+                    hnpwa.actions.run_query(displayPeople);
                 });
+            }
+        },    
+        commands: {
+            'run-query' : async function(el, value) {
+                
+                let peopleNameQuery = (value.replace("http://localhost:4500/people/", "").replace("/", ""));
+                peopleNameQuery = 'from(data.people[' + (peopleNameQuery -1 ) + ']).select({ name : _, height: _, desc: _})'; 
+                
+                let response = await client.post({body: peopleNameQuery })
+                let text = await response.text();
+                console.log("Side panel data requested")
+
+                let peopleX = JSONTag.parse(text);
+                let peopleString = JSON.stringify(peopleX); //parsing the json twice due to a firefox bug
+                let displayPeople = JSON.parse(peopleString);
+                
+                hnpwa.actions.run_query(displayPeople);
+                
+                }
+            },
+        actions: {
+            run_query : async function (displayPersonData){
+                hnpwa.view.person = displayPersonData;
             }
         },
         view: {
             people: [],
-            person: []
-        }
+            person: {}
+        }    
     });
 
     </script>
